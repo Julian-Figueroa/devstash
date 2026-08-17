@@ -291,3 +291,8 @@ English, then suggest a clearer, equivalent pattern if one exists.`,
     collectionIds: ["col-ai-prompts"],
   },
 ];
+
+// Derived from `items` rather than stored, so it can't drift out of sync.
+export function getItemCountByType(itemTypeId: string): number {
+  return items.filter((item) => item.itemTypeId === itemTypeId).length;
+}
