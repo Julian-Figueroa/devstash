@@ -2,12 +2,12 @@
 
 > One fast, searchable, AI-enhanced hub for everything a developer keeps scattered: snippets, prompts, commands, links, notes and context files.
 
-| | |
-|---|---|
-| **Status** | Pre-MVP / spec |
-| **Type** | Freemium B2C SaaS (single-tenant per user) |
-| **Stack** | Next.js 16 · React 19 · TypeScript · Prisma 7 · Neon Postgres · Cloudflare R2 · Auth.js v5 · Tailwind v4 + shadcn/ui |
-| **Pricing** | Free / Pro $8mo · $72yr |
+|             |                                                                                                                      |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Status**  | Pre-MVP / spec                                                                                                       |
+| **Type**    | Freemium B2C SaaS (single-tenant per user)                                                                           |
+| **Stack**   | Next.js 16 · React 19 · TypeScript · Prisma 7 · Neon Postgres · Cloudflare R2 · Auth.js v5 · Tailwind v4 + shadcn/ui |
+| **Pricing** | Free / Pro $8mo · $72yr                                                                                              |
 
 ---
 
@@ -35,30 +35,30 @@
 
 Developers keep their essentials scattered across too many tools:
 
-| Where it lives today | What it is |
-|---|---|
-| VS Code / Notion | Code snippets |
-| ChatGPT / Claude chat history | AI prompts |
-| Random project folders | Context files, `CLAUDE.md`, system messages |
-| Browser bookmarks | Useful links |
-| `notes.txt`, Apple Notes | Docs, explanations |
-| `~/.bash_history` | Terminal commands |
-| GitHub Gists | Project templates, boilerplates |
+| Where it lives today          | What it is                                  |
+| ----------------------------- | ------------------------------------------- |
+| VS Code / Notion              | Code snippets                               |
+| ChatGPT / Claude chat history | AI prompts                                  |
+| Random project folders        | Context files, `CLAUDE.md`, system messages |
+| Browser bookmarks             | Useful links                                |
+| `notes.txt`, Apple Notes      | Docs, explanations                          |
+| `~/.bash_history`             | Terminal commands                           |
+| GitHub Gists                  | Project templates, boilerplates             |
 
 The cost is context switching, lost knowledge and inconsistent workflows. **DevStash consolidates all of it into one keyboard-fast, searchable store with AI on top.**
 
-Positioning shorthand: *Raycast speed, Notion flexibility, developer-only scope.*
+Positioning shorthand: _Raycast speed, Notion flexibility, developer-only scope._
 
 ---
 
 ## 2. Users
 
-| Persona | Primary need | Types they lean on |
-|---|---|---|
-| **Everyday developer** | Grab a snippet/command in under 3 seconds | snippet, command, link |
-| **AI-first developer** | Version and reuse prompts, contexts, system messages | prompt, file, note |
-| **Content creator / educator** | Store code blocks with explanations for courses | snippet, note, image |
-| **Full-stack builder** | Collect patterns, boilerplates, API examples | snippet, file, link |
+| Persona                        | Primary need                                         | Types they lean on     |
+| ------------------------------ | ---------------------------------------------------- | ---------------------- |
+| **Everyday developer**         | Grab a snippet/command in under 3 seconds            | snippet, command, link |
+| **AI-first developer**         | Version and reuse prompts, contexts, system messages | prompt, file, note     |
+| **Content creator / educator** | Store code blocks with explanations for courses      | snippet, note, image   |
+| **Full-stack builder**         | Collect patterns, boilerplates, API examples         | snippet, file, link    |
 
 All four share one behaviour worth designing around: **they capture in a hurry and retrieve under pressure.** Capture and search are the two paths that must never feel slow.
 
@@ -66,7 +66,7 @@ All four share one behaviour worth designing around: **they capture in a hurry a
 
 ## 3. Scope
 
-Cut into phases so the MVP stays shippable. *(This phasing is my suggestion — the original notes didn't sequence anything.)*
+Cut into phases so the MVP stays shippable. _(This phasing is my suggestion — the original notes didn't sequence anything.)_
 
 ### Phase 1 — MVP
 
@@ -99,7 +99,7 @@ Cut into phases so the MVP stays shippable. *(This phasing is my suggestion — 
 - Custom item types
 - Redis caching
 - Public/shared collections
-- CLI + VS Code extension *(natural extension of the value prop — worth keeping in mind while designing the API)*
+- CLI + VS Code extension _(natural extension of the value prop — worth keeping in mind while designing the API)_
 
 ---
 
@@ -111,11 +111,11 @@ Seven system types ship first. They are immutable (`isSystem = true`, `userId = 
 
 Every type resolves to one of three **content shapes**:
 
-| Shape | Types | Storage |
-|---|---|---|
-| `TEXT` | snippet, prompt, note, command | `content` column |
-| `URL` | link | `url` column |
-| `FILE` | file, image *(Pro)* | R2 object, referenced by `fileKey` |
+| Shape  | Types                          | Storage                            |
+| ------ | ------------------------------ | ---------------------------------- |
+| `TEXT` | snippet, prompt, note, command | `content` column                   |
+| `URL`  | link                           | `url` column                       |
+| `FILE` | file, image _(Pro)_            | R2 object, referenced by `fileKey` |
 
 > **Spec fix:** the original data model had `contentType (text \| file)` — only two values — but the feature list describes three shapes including `url`. Corrected to a three-value enum below.
 
@@ -123,7 +123,7 @@ Items open in a **drawer**, not a page. Create and edit happen in the same drawe
 
 ### B. Collections
 
-Free-form groupings. An item can belong to many collections — a React snippet lives in both *React Patterns* and *Interview Prep*. Membership is a join table so we can track `addedAt` and sort by "recently added to this collection".
+Free-form groupings. An item can belong to many collections — a React snippet lives in both _React Patterns_ and _Interview Prep_. Membership is a join table so we can track `addedAt` and sort by "recently added to this collection".
 
 `defaultTypeId` exists so an **empty** collection still renders a colour and so the "new item" drawer can prefill a type. Once a collection has items, the card colour is derived from its dominant type instead.
 
@@ -138,7 +138,7 @@ Email/password (credentials) and GitHub OAuth. See the credentials/session cavea
 ### E. Other features
 
 - Favorite items and collections; pin items to top
-- Recently used *(requires a `lastUsedAt` column — this was missing from the original data model)*
+- Recently used _(requires a `lastUsedAt` column — this was missing from the original data model)_
 - Import code from a file (client-side read → fills the editor; not an upload)
 - Markdown editor for text types, syntax highlighting for code
 - Add/remove items to/from multiple collections; view an item's collections
@@ -155,34 +155,34 @@ Auto-tag, summarize, explain code, optimize prompt. See [§11](#11-ai-features).
 
 The original note said URLs look like `/items/snippets` — plural — while the type name is singular (`snippet`). Resolution: **types carry a `slug` field** that is the plural URL form, so display name and URL stay independent.
 
-| Route | Purpose |
-|---|---|
-| `/` | Marketing landing |
-| `/login`, `/register` | Auth |
-| `/dashboard` | Collection grid + recent items |
-| `/items` | All items |
-| `/items/[typeSlug]` | Filtered by type — `/items/snippets`, `/items/prompts`, `/items/commands` |
-| `/items/[typeSlug]?item=[id]` | Item drawer open, deep-linkable |
-| `/collections` | All collections |
-| `/collections/[slug]` | Single collection |
-| `/search?q=` | Full search results |
-| `/settings` | Profile, appearance, export |
-| `/settings/billing` | Stripe portal entry |
+| Route                         | Purpose                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------- |
+| `/`                           | Marketing landing                                                         |
+| `/login`, `/register`         | Auth                                                                      |
+| `/dashboard`                  | Collection grid + recent items                                            |
+| `/items`                      | All items                                                                 |
+| `/items/[typeSlug]`           | Filtered by type — `/items/snippets`, `/items/prompts`, `/items/commands` |
+| `/items/[typeSlug]?item=[id]` | Item drawer open, deep-linkable                                           |
+| `/collections`                | All collections                                                           |
+| `/collections/[slug]`         | Single collection                                                         |
+| `/search?q=`                  | Full search results                                                       |
+| `/settings`                   | Profile, appearance, export                                               |
+| `/settings/billing`           | Stripe portal entry                                                       |
 
-| API route | Method | Notes |
-|---|---|---|
-| `/api/auth/[...nextauth]` | GET/POST | Auth.js handlers |
-| `/api/items` | GET/POST | List + create *(plan limit enforced)* |
-| `/api/items/[id]` | GET/PATCH/DELETE | |
-| `/api/items/[id]/use` | POST | Bumps `lastUsedAt` / `useCount` |
-| `/api/collections` | GET/POST | *(plan limit enforced)* |
-| `/api/collections/[id]/items` | POST/DELETE | Join-table mutations |
-| `/api/search` | GET | |
-| `/api/uploads/presign` | POST | Returns R2 presigned PUT *(Pro)* |
-| `/api/ai/[action]` | POST | `tag` · `summarize` · `explain` · `optimize` *(Pro, rate-limited)* |
-| `/api/export` | GET | JSON or ZIP |
-| `/api/stripe/checkout` | POST | |
-| `/api/stripe/webhook` | POST | Signature-verified, no auth |
+| API route                     | Method           | Notes                                                              |
+| ----------------------------- | ---------------- | ------------------------------------------------------------------ |
+| `/api/auth/[...nextauth]`     | GET/POST         | Auth.js handlers                                                   |
+| `/api/items`                  | GET/POST         | List + create _(plan limit enforced)_                              |
+| `/api/items/[id]`             | GET/PATCH/DELETE |                                                                    |
+| `/api/items/[id]/use`         | POST             | Bumps `lastUsedAt` / `useCount`                                    |
+| `/api/collections`            | GET/POST         | _(plan limit enforced)_                                            |
+| `/api/collections/[id]/items` | POST/DELETE      | Join-table mutations                                               |
+| `/api/search`                 | GET              |                                                                    |
+| `/api/uploads/presign`        | POST             | Returns R2 presigned PUT _(Pro)_                                   |
+| `/api/ai/[action]`            | POST             | `tag` · `summarize` · `explain` · `optimize` _(Pro, rate-limited)_ |
+| `/api/export`                 | GET              | JSON or ZIP                                                        |
+| `/api/stripe/checkout`        | POST             |                                                                    |
+| `/api/stripe/webhook`         | POST             | Signature-verified, no auth                                        |
 
 **Mutations should prefer Server Actions** over API routes wherever the caller is our own UI; keep true API routes for webhooks, uploads, AI and anything a future CLI would call.
 
@@ -297,19 +297,19 @@ erDiagram
 
 ### Changes from the original notes
 
-| Change | Why |
-|---|---|
-| `contentType` is now `TEXT \| URL \| FILE` | Original had only two values but the spec describes three shapes |
-| `contentType` moved onto `ItemType` too | The type determines the shape; storing it on the type prevents a "link with file content" |
-| Added `Item.lastUsedAt` + `useCount` | "Recently used" was a listed feature with nowhere to store it |
-| Added `Tag.userId` + `@@unique([userId, name])` | Original `Tag` was global — one user's tag rename would hit everybody |
-| Added `ItemTag` join table | Many-to-many was implied but not modelled |
-| `isPro: boolean` → `plan: enum` | Enum leaves room for a future Team tier; avoids a boolean that has to be re-derived from Stripe on every read |
-| Added `stripePriceId`, `stripeCurrentPeriodEnd` | Needed to render "renews on X" and to grant access through the end of a cancelled period |
-| Added `fileKey`, `fileMimeType` | R2 objects should be private; store the key and sign URLs on read rather than persisting a public `fileUrl` |
-| Added `slug` to `ItemType` and `Collection` | Clean URLs without exposing cuids |
-| Added `sortOrder`, `isProOnly` to `ItemType` | Sidebar ordering + gating file/image types without hardcoding names in app code |
-| Added `searchVector` | See [§9](#9-search-implementation) |
+| Change                                          | Why                                                                                                           |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `contentType` is now `TEXT \| URL \| FILE`      | Original had only two values but the spec describes three shapes                                              |
+| `contentType` moved onto `ItemType` too         | The type determines the shape; storing it on the type prevents a "link with file content"                     |
+| Added `Item.lastUsedAt` + `useCount`            | "Recently used" was a listed feature with nowhere to store it                                                 |
+| Added `Tag.userId` + `@@unique([userId, name])` | Original `Tag` was global — one user's tag rename would hit everybody                                         |
+| Added `ItemTag` join table                      | Many-to-many was implied but not modelled                                                                     |
+| `isPro: boolean` → `plan: enum`                 | Enum leaves room for a future Team tier; avoids a boolean that has to be re-derived from Stripe on every read |
+| Added `stripePriceId`, `stripeCurrentPeriodEnd` | Needed to render "renews on X" and to grant access through the end of a cancelled period                      |
+| Added `fileKey`, `fileMimeType`                 | R2 objects should be private; store the key and sign URLs on read rather than persisting a public `fileUrl`   |
+| Added `slug` to `ItemType` and `Collection`     | Clean URLs without exposing cuids                                                                             |
+| Added `sortOrder`, `isProOnly` to `ItemType`    | Sidebar ordering + gating file/image types without hardcoding names in app code                               |
+| Added `searchVector`                            | See [§9](#9-search-implementation)                                                                            |
 
 ---
 
@@ -557,17 +557,17 @@ npx prisma generate                                    # now explicit in v7 — 
 
 System types are data, not code — seed them in a migration so the ids are stable across environments.
 
-| name | slug | contentType | color | icon | pro |
-|---|---|---|---|---|---|
-| Snippet | `snippets` | TEXT | `#3b82f6` | `Code` | — |
-| Prompt | `prompts` | TEXT | `#8b5cf6` | `Sparkles` | — |
-| Command | `commands` | TEXT | `#f97316` | `Terminal` | — |
-| Note | `notes` | TEXT | `#fde047` | `StickyNote` | — |
-| Link | `links` | URL | `#10b981` | `Link` | — |
-| File | `files` | FILE | `#6b7280` | `File` | ✅ |
-| Image | `images` | FILE | `#ec4899` | `Image` | ✅ |
+| name    | slug       | contentType | color     | icon         | pro |
+| ------- | ---------- | ----------- | --------- | ------------ | --- |
+| Snippet | `snippets` | TEXT        | `#3b82f6` | `Code`       | —   |
+| Prompt  | `prompts`  | TEXT        | `#8b5cf6` | `Sparkles`   | —   |
+| Command | `commands` | TEXT        | `#f97316` | `Terminal`   | —   |
+| Note    | `notes`    | TEXT        | `#fde047` | `StickyNote` | —   |
+| Link    | `links`    | URL         | `#10b981` | `Link`       | —   |
+| File    | `files`    | FILE        | `#6b7280` | `File`       | ✅  |
+| Image   | `images`   | FILE        | `#ec4899` | `Image`      | ✅  |
 
-⚠️ **Gotcha:** `@@unique([userId, slug])` does not prevent duplicate *system* types, because Postgres treats `NULL` values as distinct in unique indexes. Add a partial index by hand in a migration:
+⚠️ **Gotcha:** `@@unique([userId, slug])` does not prevent duplicate _system_ types, because Postgres treats `NULL` values as distinct in unique indexes. Add a partial index by hand in a migration:
 
 ```sql
 CREATE UNIQUE INDEX item_type_system_slug_key
@@ -605,24 +605,24 @@ Debounce the palette at ~150ms and cap results at 20 with "see all results" link
 
 ## 10. Monetization & plan gating
 
-| | Free | Pro — $8/mo or $72/yr |
-|---|---|---|
-| Items | 50 | Unlimited |
-| Collections | 3 | Unlimited |
-| System types | All except file & image | All |
-| Custom types | ✗ | ✅ *(Phase 4)* |
-| File & image uploads | ✗ | ✅ |
-| Search | Basic | Full |
-| AI auto-tagging | ✗ | ✅ |
-| AI summaries | ✗ | ✅ |
-| AI explain code | ✗ | ✅ |
-| Prompt optimizer | ✗ | ✅ |
-| Export | JSON only *(see note)* | JSON + ZIP with files |
-| Support | Community | Priority |
+|                      | Free                    | Pro — $8/mo or $72/yr |
+| -------------------- | ----------------------- | --------------------- |
+| Items                | 50                      | Unlimited             |
+| Collections          | 3                       | Unlimited             |
+| System types         | All except file & image | All                   |
+| Custom types         | ✗                       | ✅ _(Phase 4)_        |
+| File & image uploads | ✗                       | ✅                    |
+| Search               | Basic                   | Full                  |
+| AI auto-tagging      | ✗                       | ✅                    |
+| AI summaries         | ✗                       | ✅                    |
+| AI explain code      | ✗                       | ✅                    |
+| Prompt optimizer     | ✗                       | ✅                    |
+| Export               | JSON only _(see note)_  | JSON + ZIP with files |
+| Support              | Community               | Priority              |
 
 **Annual works out to $6/mo — a 25% discount.** Worth stating on the pricing page explicitly; it's the strongest conversion lever you have.
 
-> **Conflict in the original notes:** "Export data as different formats" appears under general features *and* "Export data (JSON/ZIP)" appears as Pro-only. My recommendation: give free users a plain JSON export of their own data and reserve ZIP-with-files and format variants for Pro. Data portability as a paywall generates support tickets and bad reviews, and free users can't have files anyway.
+> **Conflict in the original notes:** "Export data as different formats" appears under general features _and_ "Export data (JSON/ZIP)" appears as Pro-only. My recommendation: give free users a plain JSON export of their own data and reserve ZIP-with-files and format variants for Pro. Data portability as a paywall generates support tickets and bad reviews, and free users can't have files anyway.
 
 ### Enforcement
 
@@ -631,8 +631,20 @@ Define limits in one place and check them server-side on every create path:
 ```ts
 // src/lib/plans.ts
 export const PLAN_LIMITS = {
-  FREE: { items: 50, collections: 3, uploads: false, ai: false, maxFileSize: 0 },
-  PRO:  { items: Infinity, collections: Infinity, uploads: true, ai: true, maxFileSize: 25 * 1024 * 1024 },
+  FREE: {
+    items: 50,
+    collections: 3,
+    uploads: false,
+    ai: false,
+    maxFileSize: 0,
+  },
+  PRO: {
+    items: Infinity,
+    collections: Infinity,
+    uploads: true,
+    ai: true,
+    maxFileSize: 25 * 1024 * 1024,
+  },
 } as const;
 ```
 
@@ -645,12 +657,12 @@ export const PLAN_LIMITS = {
 
 ## 11. AI features
 
-| Feature | Input | Output | Trigger |
-|---|---|---|---|
-| Auto-tag | title + content + existing tag list | 3–5 tags, JSON array | On save, suggested not applied |
-| Summarize | content | 1–2 sentence `aiSummary` | On demand |
-| Explain code | content + language | Markdown explanation | On demand, drawer panel |
-| Prompt optimizer | prompt content | Rewritten prompt + rationale | On demand, prompt types only |
+| Feature          | Input                               | Output                       | Trigger                        |
+| ---------------- | ----------------------------------- | ---------------------------- | ------------------------------ |
+| Auto-tag         | title + content + existing tag list | 3–5 tags, JSON array         | On save, suggested not applied |
+| Summarize        | content                             | 1–2 sentence `aiSummary`     | On demand                      |
+| Explain code     | content + language                  | Markdown explanation         | On demand, drawer panel        |
+| Prompt optimizer | prompt content                      | Rewritten prompt + rationale | On demand, prompt types only   |
 
 **Implementation notes**
 
@@ -676,15 +688,15 @@ export const PLAN_LIMITS = {
 
 Lucide icon names, matching `ItemType.icon`.
 
-| Type | Colour | Swatch | Icon |
-|---|---|---|---|
-| Snippet | `#3b82f6` blue | 🟦 | `Code` |
-| Prompt | `#8b5cf6` purple | 🟪 | `Sparkles` |
-| Command | `#f97316` orange | 🟧 | `Terminal` |
-| Note | `#fde047` yellow | 🟨 | `StickyNote` |
-| File | `#6b7280` gray | ⬜ | `File` |
-| Image | `#ec4899` pink | 🟥 | `Image` |
-| Link | `#10b981` emerald | 🟩 | `Link` |
+| Type    | Colour            | Swatch | Icon         |
+| ------- | ----------------- | ------ | ------------ |
+| Snippet | `#3b82f6` blue    | 🟦     | `Code`       |
+| Prompt  | `#8b5cf6` purple  | 🟪     | `Sparkles`   |
+| Command | `#f97316` orange  | 🟧     | `Terminal`   |
+| Note    | `#fde047` yellow  | 🟨     | `StickyNote` |
+| File    | `#6b7280` gray    | ⬜     | `File`       |
+| Image   | `#ec4899` pink    | 🟥     | `Image`      |
+| Link    | `#10b981` emerald | 🟩     | `Link`       |
 
 ⚠️ `#fde047` (note yellow) fails WCAG AA against white text and is low-contrast on light backgrounds. Define each colour as a **pair** — a saturated version for dark mode and a darker version for light mode — rather than one hex used everywhere. Tailwind v4's `@theme` block is the right home for this.
 
@@ -711,6 +723,10 @@ flowchart LR
 Smooth transitions · card hover states · toast notifications (sonner) · loading skeletons · **optimistic updates** for favorite/pin/copy — those must feel instant, and a round-trip will make them feel broken.
 
 One thing worth adding: a **copy button on every snippet card** that doesn't require opening the drawer. It's the single most common action in a tool like this.
+
+### Screenshots
+
+Refer to the screenshots in the `@context/screenshots` directory as a base for the dashboard UI. It does not need to be pixel-perfect, but should give a good idea of the layout and visual elements.
 
 ---
 
@@ -802,27 +818,32 @@ Things the notes don't settle. None block starting, but each will bite later if 
 ## 15. Reference links
 
 **Framework & data**
+
 - [Next.js 16 release notes](https://nextjs.org/blog/next-16) · [Upgrade guide](https://nextjs.org/docs/app/guides/upgrading/version-16)
 - [Prisma 7 upgrade guide](https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7) · [Prisma changelog](https://www.prisma.io/changelog)
 - [Prisma 7 AMA — reasoning behind the changes](https://www.prisma.io/blog/prisma-7-ama-clearing-up-the-why-behind-the-changes)
 - [Neon docs](https://neon.tech/docs) · [Neon + Prisma guide](https://neon.tech/docs/guides/prisma)
 
 **Auth**
+
 - [Auth.js v5 migration guide](https://authjs.dev/getting-started/migrating-to-v5)
 - [Auth.js Prisma adapter](https://authjs.dev/getting-started/adapters/prisma)
 - [Better Auth](https://www.better-auth.com) — the alternative worth 30 minutes
 - [Next.js auth library comparison, 2026](https://blog.logrocket.com/best-auth-library-nextjs-2026/)
 
 **UI**
+
 - [Tailwind CSS v4](https://tailwindcss.com/docs) · [shadcn/ui](https://ui.shadcn.com) · [Lucide icons](https://lucide.dev/icons)
 - [Shiki](https://shiki.style) — server-rendered syntax highlighting
 - [sonner](https://sonner.emilkowal.ski) — toasts · [cmdk](https://cmdk.paco.me) — command palette
 
 **Infra**
+
 - [Cloudflare R2 docs](https://developers.cloudflare.com/r2/) · [Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/)
 - [Stripe subscriptions](https://docs.stripe.com/billing/subscriptions/overview) · [Webhook best practices](https://docs.stripe.com/webhooks)
 - [Upstash Ratelimit](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
 - [OpenAI API pricing](https://openai.com/api/pricing/) · [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
 
 **Postgres search**
+
 - [PostgreSQL full-text search](https://www.postgresql.org/docs/current/textsearch.html) · [pg_trgm](https://www.postgresql.org/docs/current/pgtrgm.html)
