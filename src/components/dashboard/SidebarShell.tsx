@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/sheet";
 import { useSidebar } from "@/components/dashboard/sidebar-context";
 import { getTypeIcon } from "@/lib/item-type-icons";
-import type { Collection, ItemType, User } from "@/lib/mock-data";
+import type { User } from "@/lib/mock-data";
+import type { CollectionSummary } from "@/lib/db/collections";
+import type { SidebarItemType } from "@/lib/db/items";
 
 const NAV_LINKS = [
   { label: "All Items", href: "/items", icon: LayoutGrid },
@@ -45,8 +47,8 @@ function SidebarBrand() {
 }
 
 interface SidebarShellProps {
-  itemTypes: (ItemType & { count: number })[];
-  collections: Collection[];
+  itemTypes: SidebarItemType[];
+  collections: CollectionSummary[];
   currentUser: User;
 }
 
@@ -118,11 +120,30 @@ function SidebarNav({
             <Link
               key={collection.id}
               href={`/collections/${collection.slug}`}
-              className="truncate rounded-md px-2.5 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              className="flex items-center gap-2 truncate rounded-md px-2.5 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             >
-              {collection.name}
+              {collection.isFavorite ? (
+                <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
+              ) : (
+                <span
+                  className="size-2 shrink-0 rounded-full"
+                  title={collection.dominantType?.name}
+                  style={{
+                    backgroundColor:
+                      collection.dominantType?.color ??
+                      "var(--muted-foreground)",
+                  }}
+                />
+              )}
+              <span className="truncate">{collection.name}</span>
             </Link>
           ))}
+          <Link
+            href="/collections"
+            className="rounded-md px-2.5 py-2 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          >
+            View all collections
+          </Link>
         </div>
       )}
 
