@@ -1,5 +1,9 @@
 # Coding Standards
 
+## Node.js
+
+- We're using NVM, and we have this version as default: default -> 20.13.1 (-> v20.13.1), so you have to run `nvm use v22.19.0`. DO NOT change the default version.
+
 ## TypeScript
 
 - Strict mode enabled
