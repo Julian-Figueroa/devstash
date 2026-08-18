@@ -1,0 +1,83 @@
+import Link from "next/link";
+import { Star } from "lucide-react";
+
+import { Card } from "@/components/ui/card";
+import { getTypeIcon } from "@/lib/item-type-icons";
+import type { Collection, Item, ItemType } from "@/lib/mock-data";
+
+interface CollectionCardProps {
+  collection: Collection;
+  items: Item[];
+  itemTypes: ItemType[];
+}
+
+// Background tint and type chips are derived from the collection's items
+// rather than stored, per @context/project-overview.md §4-B — an empty
+// collection falls back to `defaultTypeId`.
+export function CollectionCard({
+  collection,
+  items,
+  itemTypes,
+}: CollectionCardProps) {
+  const collectionItems = items.filter((item) =>
+    item.collectionIds.includes(collection.id)
+  );
+
+  const typeCounts = new Map<string, number>();
+  for (const item of collectionItems) {
+    typeCounts.set(item.itemTypeId, (typeCounts.get(item.itemTypeId) ?? 0) + 1);
+  }
+
+  const dominantTypeId =
+    [...typeCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ??
+    collection.defaultTypeId;
+  const dominantType = itemTypes.find((type) => type.id === dominantTypeId);
+  const presentTypes = itemTypes.filter((type) => typeCounts.has(type.id));
+
+  return (
+    <Link href={`/collections/${collection.slug}`}>
+      <Card
+        className="h-full justify-between gap-3 p-4 transition-colors hover:ring-foreground/20"
+        style={{
+          backgroundImage: dominantType
+            ? `linear-gradient(180deg, ${dominantType.color}26 0%, transparent 65%)`
+            : undefined,
+        }}
+      >
+        <div>
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-medium">{collection.name}</h3>
+            {collection.isFavorite && (
+              <Star className="size-4 shrink-0 fill-amber-400 text-amber-400" />
+            )}
+          </div>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {collection.description}
+          </p>
+        </div>
+
+        <div className="flex items-end justify-between">
+          <div className="flex gap-1.5">
+            {presentTypes.map((type) => {
+              const Icon = getTypeIcon(type.icon);
+              return (
+                <span
+                  key={type.id}
+                  title={type.name}
+                  className="flex size-6 items-center justify-center rounded-md"
+                  style={{ backgroundColor: `${type.color}26`, color: type.color }}
+                >
+                  <Icon className="size-3.5" />
+                </span>
+              );
+            })}
+          </div>
+          <span className="shrink-0 text-xs text-muted-foreground">
+            {collectionItems.length}{" "}
+            {collectionItems.length === 1 ? "item" : "items"}
+          </span>
+        </div>
+      </Card>
+    </Link>
+  );
+}
