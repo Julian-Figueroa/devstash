@@ -13,17 +13,24 @@ const byLastUsedDesc = (a: Item, b: Item) =>
 
 export default function DashboardPage() {
   const stats: Stat[] = [
-    { label: "Items", value: items.length, icon: LayoutGrid },
-    { label: "Collections", value: collections.length, icon: FolderKanban },
+    { label: "Items", value: items.length, icon: LayoutGrid, color: "#3b82f6" },
+    {
+      label: "Collections",
+      value: collections.length,
+      icon: FolderKanban,
+      color: "#8b5cf6",
+    },
     {
       label: "Favorite Items",
       value: items.filter((item) => item.isFavorite).length,
       icon: Star,
+      color: "#f59e0b",
     },
     {
       label: "Favorite Collections",
       value: collections.filter((collection) => collection.isFavorite).length,
       icon: Star,
+      color: "#ec4899",
     },
   ];
 
