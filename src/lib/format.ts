@@ -6,8 +6,12 @@ const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 const WEEK = 7 * DAY;
 
-export function formatRelativeTime(iso: string, now: Date = new Date()): string {
-  const diffMs = now.getTime() - new Date(iso).getTime();
+export function formatRelativeTime(
+  date: Date | string,
+  now: Date = new Date()
+): string {
+  const target = new Date(date);
+  const diffMs = now.getTime() - target.getTime();
 
   if (diffMs < MINUTE) return "just now";
   if (diffMs < HOUR) return `${Math.floor(diffMs / MINUTE)}m ago`;
@@ -16,7 +20,7 @@ export function formatRelativeTime(iso: string, now: Date = new Date()): string 
   if (diffMs < WEEK) return `${Math.floor(diffMs / DAY)}d ago`;
   if (diffMs < 4 * WEEK) return `${Math.floor(diffMs / WEEK)}w ago`;
 
-  return new Date(iso).toLocaleDateString("en-US", {
+  return target.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });

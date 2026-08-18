@@ -5,19 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { formatFileSize, formatRelativeTime } from "@/lib/format";
 import { getTypeIcon } from "@/lib/item-type-icons";
-import type { Item, ItemType } from "@/lib/mock-data";
+import type { ItemSummary } from "@/lib/db/items";
 
 const VISIBLE_TAGS = 2;
 
 interface ItemCardProps {
-  item: Item;
-  type: ItemType;
+  item: ItemSummary;
 }
 
 const previewClasses =
   "mt-3 line-clamp-2 rounded-md bg-muted px-2.5 py-2 font-mono text-xs text-muted-foreground";
 
-function ItemPreview({ item }: { item: Item }) {
+function ItemPreview({ item }: { item: ItemSummary }) {
   if (item.contentType === "URL") {
     return <p className={previewClasses}>{item.url}</p>;
   }
@@ -34,7 +33,8 @@ function ItemPreview({ item }: { item: Item }) {
 
 // Deep-links into the item drawer per @context/project-overview.md §5 route
 // map — `/items/[typeSlug]?item=[id]`.
-export function ItemCard({ item, type }: ItemCardProps) {
+export function ItemCard({ item }: ItemCardProps) {
+  const { type } = item;
   const visibleTags = item.tags.slice(0, VISIBLE_TAGS);
   const hiddenTagCount = item.tags.length - visibleTags.length;
 
