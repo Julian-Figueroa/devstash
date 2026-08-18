@@ -3,42 +3,24 @@ import { Star } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { getTypeIcon } from "@/lib/item-type-icons";
-import type { Collection, Item, ItemType } from "@/lib/mock-data";
+import type { CollectionSummary } from "@/lib/db/collections";
 
 interface CollectionCardProps {
-  collection: Collection;
-  items: Item[];
-  itemTypes: ItemType[];
+  collection: CollectionSummary;
 }
 
 // Background tint and type chips are derived from the collection's items
 // rather than stored, per @context/project-overview.md §4-B — an empty
 // collection falls back to `defaultTypeId`.
-export function CollectionCard({
-  collection,
-  items,
-  itemTypes,
-}: CollectionCardProps) {
-  const collectionItems = items.filter((item) =>
-    item.collectionIds.includes(collection.id)
-  );
-
-  const typeCounts = new Map<string, number>();
-  for (const item of collectionItems) {
-    typeCounts.set(item.itemTypeId, (typeCounts.get(item.itemTypeId) ?? 0) + 1);
-  }
-
-  const dominantTypeId =
-    [...typeCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ??
-    collection.defaultTypeId;
-  const dominantType = itemTypes.find((type) => type.id === dominantTypeId);
-  const presentTypes = itemTypes.filter((type) => typeCounts.has(type.id));
+export function CollectionCard({ collection }: CollectionCardProps) {
+  const { dominantType, presentTypes, itemCount } = collection;
 
   return (
     <Link href={`/collections/${collection.slug}`}>
       <Card
-        className="h-full justify-between gap-3 p-4 transition-colors hover:ring-foreground/20"
+        className="h-full justify-between gap-3 border p-4 transition-colors hover:ring-foreground/20"
         style={{
+          borderColor: dominantType ? `${dominantType.color}66` : undefined,
           backgroundImage: dominantType
             ? `linear-gradient(180deg, ${dominantType.color}26 0%, transparent 65%)`
             : undefined,
@@ -73,8 +55,7 @@ export function CollectionCard({
             })}
           </div>
           <span className="shrink-0 text-xs text-muted-foreground">
-            {collectionItems.length}{" "}
-            {collectionItems.length === 1 ? "item" : "items"}
+            {itemCount} {itemCount === 1 ? "item" : "items"}
           </span>
         </div>
       </Card>

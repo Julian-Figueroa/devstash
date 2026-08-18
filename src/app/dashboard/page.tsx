@@ -3,7 +3,12 @@ import { FolderKanban, LayoutGrid, Star } from "lucide-react";
 import { CollectionCard } from "@/components/dashboard/CollectionCard";
 import { ItemCard } from "@/components/dashboard/ItemCard";
 import { StatsCards, type Stat } from "@/components/dashboard/StatsCards";
-import { collections, itemTypes, items, type Item, type ItemType } from "@/lib/mock-data";
+import {
+  CURRENT_USER_ID,
+  getCollectionStats,
+  getRecentCollections,
+} from "@/lib/db/collections";
+import { itemTypes, items, type Item, type ItemType } from "@/lib/mock-data";
 
 const RECENT_COLLECTIONS_LIMIT = 6;
 const RECENT_ITEMS_LIMIT = 10;
@@ -11,12 +16,17 @@ const RECENT_ITEMS_LIMIT = 10;
 const byLastUsedDesc = (a: Item, b: Item) =>
   a.lastUsedAt < b.lastUsedAt ? 1 : -1;
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [collectionStats, recentCollections] = await Promise.all([
+    getCollectionStats(CURRENT_USER_ID),
+    getRecentCollections(CURRENT_USER_ID, RECENT_COLLECTIONS_LIMIT),
+  ]);
+
   const stats: Stat[] = [
     { label: "Items", value: items.length, icon: LayoutGrid, color: "#3b82f6" },
     {
       label: "Collections",
-      value: collections.length,
+      value: collectionStats.total,
       icon: FolderKanban,
       color: "#8b5cf6",
     },
@@ -28,13 +38,11 @@ export default function DashboardPage() {
     },
     {
       label: "Favorite Collections",
-      value: collections.filter((collection) => collection.isFavorite).length,
+      value: collectionStats.favorites,
       icon: Star,
       color: "#ec4899",
     },
   ];
-
-  const recentCollections = collections.slice(0, RECENT_COLLECTIONS_LIMIT);
 
   const pinnedItems = items.filter((item) => item.isPinned).sort(byLastUsedDesc);
   const recentItems = items
@@ -56,7 +64,7 @@ export default function DashboardPage() {
       <div>
         <h2 className="text-2xl font-semibold">Dashboard</h2>
         <p className="text-sm text-muted-foreground">
-          {items.length} items · {collections.length} collections
+          {items.length} items · {collectionStats.total} collections
         </p>
       </div>
 
@@ -66,12 +74,7 @@ export default function DashboardPage() {
         </h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {recentCollections.map((collection) => (
-            <CollectionCard
-              key={collection.id}
-              collection={collection}
-              items={items}
-              itemTypes={itemTypes}
-            />
+            <CollectionCard key={collection.id} collection={collection} />
           ))}
         </div>
       </section>
