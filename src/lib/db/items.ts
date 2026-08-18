@@ -120,3 +120,41 @@ export async function getItemStats(userId: string): Promise<ItemStats> {
 
   return { total, favorites };
 }
+
+export interface SidebarItemType extends ItemTypeSummary {
+  isProOnly: boolean;
+  /** Count of the user's items of this type. */
+  count: number;
+}
+
+/**
+ * System item types (plus the user's own custom types, once Phase 4 ships)
+ * with per-user item counts, for the sidebar's type list.
+ */
+export async function getSidebarItemTypes(
+  userId: string
+): Promise<SidebarItemType[]> {
+  const types = await db.itemType.findMany({
+    where: { OR: [{ isSystem: true }, { userId }] },
+    orderBy: { sortOrder: "asc" },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      icon: true,
+      color: true,
+      isProOnly: true,
+      _count: { select: { items: { where: { userId } } } },
+    },
+  });
+
+  return types.map((type) => ({
+    id: type.id,
+    name: type.name,
+    slug: type.slug,
+    icon: type.icon,
+    color: type.color,
+    isProOnly: type.isProOnly,
+    count: type._count.items,
+  }));
+}
