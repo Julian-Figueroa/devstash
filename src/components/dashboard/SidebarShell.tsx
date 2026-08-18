@@ -52,6 +52,31 @@ interface SidebarShellProps {
   currentUser: User;
 }
 
+// A collection row: a star for favorites, otherwise a colored dot for the
+// collection's dominant (most-used) item type.
+function CollectionLink({ collection }: { collection: CollectionSummary }) {
+  return (
+    <Link
+      href={`/collections/${collection.slug}`}
+      className="flex items-center gap-2 truncate rounded-md px-2.5 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+    >
+      {collection.isFavorite ? (
+        <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
+      ) : (
+        <span
+          className="size-2 shrink-0 rounded-full"
+          title={collection.dominantType?.name}
+          style={{
+            backgroundColor:
+              collection.dominantType?.color ?? "var(--muted-foreground)",
+          }}
+        />
+      )}
+      <span className="truncate">{collection.name}</span>
+    </Link>
+  );
+}
+
 function SidebarNav({
   collapsed,
   itemTypes,
@@ -64,6 +89,8 @@ function SidebarNav({
     .join("")
     .slice(0, 2)
     .toUpperCase();
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const recentCollections = collections.filter((c) => !c.isFavorite);
 
   return (
     <>
@@ -116,28 +143,29 @@ function SidebarNav({
           <h3 className="px-2.5 pt-2 pb-1 text-xs font-medium text-muted-foreground">
             Collections
           </h3>
-          {collections.map((collection) => (
-            <Link
-              key={collection.id}
-              href={`/collections/${collection.slug}`}
-              className="flex items-center gap-2 truncate rounded-md px-2.5 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              {collection.isFavorite ? (
-                <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
-              ) : (
-                <span
-                  className="size-2 shrink-0 rounded-full"
-                  title={collection.dominantType?.name}
-                  style={{
-                    backgroundColor:
-                      collection.dominantType?.color ??
-                      "var(--muted-foreground)",
-                  }}
-                />
-              )}
-              <span className="truncate">{collection.name}</span>
-            </Link>
-          ))}
+
+          {favoriteCollections.length > 0 && (
+            <>
+              <h4 className="px-2.5 pt-1 pb-1 text-[11px] font-medium text-muted-foreground">
+                Favorites
+              </h4>
+              {favoriteCollections.map((collection) => (
+                <CollectionLink key={collection.id} collection={collection} />
+              ))}
+            </>
+          )}
+
+          {recentCollections.length > 0 && (
+            <>
+              <h4 className="px-2.5 pt-1 pb-1 text-[11px] font-medium text-muted-foreground">
+                Recent
+              </h4>
+              {recentCollections.map((collection) => (
+                <CollectionLink key={collection.id} collection={collection} />
+              ))}
+            </>
+          )}
+
           <Link
             href="/collections"
             className="rounded-md px-2.5 py-2 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground"
